@@ -1,10 +1,8 @@
-"""Módulo de carga y pocedimiento de datos desde el JSON"""
-
 import json
 from clases import Localidad, Municipio
 
 def cargar_datos_json(ruta_archivo: str = "zonas_caracas.json"):
-    """Lee el archivo JSON y convierte la estructura a objetos Municipio y Localidad."""
+    "Lee el archivo JSON y convierte la estructura a objetos Municipio y Localidad"
     with open(ruta_archivo, "r", encoding = "utf-8") as archivo:
         datos_raw = json.load(archivo)
 
