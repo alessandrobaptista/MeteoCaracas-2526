@@ -1,7 +1,7 @@
 import requests
 from clases import RegistroClima
 
-# 'tabla de codigos de clima de open-meteo (WMO)'
+"Codigos de clima de open-meteo (WMO) traducidos a texto"
 CODIGOS_CLIMA = {
     0: "Despejado",
     1: "Mayormente despejado",
@@ -24,11 +24,10 @@ CODIGOS_CLIMA = {
 
 
 def obtener_clima_localidad(latitud, longitud):
-    # 'si la localidad no tiene coordenadas no hay nada que consultar'
+    "Consulta el clima actual de una localidad en la API de Open-Meteo"
     if latitud is None or longitud is None:
         return None
 
-    # parametros que le pedimos a la API, "current" es lo que queremos del clima de ahorita
     parametros = {
         "latitude": latitud,
         "longitude": longitud,
@@ -36,19 +35,24 @@ def obtener_clima_localidad(latitud, longitud):
         "timezone": "auto",
     }
 
+
+
     try:
-        resp = requests.get("https://api.open-meteo.com/v1/forecast", params=parametros, timeout=8)
+        "(timeout = 10) ---> Espera maximo 10 segundos la respuesta antes de dar error de conexion "
+        resp = requests.get("https://api.open-meteo.com/v1/forecast", params=parametros, timeout=10)
     except requests.exceptions.RequestException as i:
-        # esto salta si no hay internet, o si la API no responde a tiempo
         print("No se pudo conectar con Open-Meteo:", i)
         return None
 
+    
+
     if resp.status_code != 200:
+        "200 es el codigo HTTP que indica que todo esta bien, si no es 200,la peticion fallo"
         print("Open-Meteo respondio con error:", resp.status_code)
         return None
 
     actual = resp.json().get("current", {})
-    codigo = actual.get("weather_code")  # esto es el numero que despues traducimos con CODIGOS_CLIMA
+    codigo = actual.get("weather_code")
 
     return RegistroClima(
         temperatura = actual.get("temperature_2m", 0.0),
