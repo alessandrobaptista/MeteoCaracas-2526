@@ -22,7 +22,17 @@ class Municipio:
         self.localidades = []
 
     def agregar_localidad(self, localidad: Localidad):
-    
+
         "Agrega un objeto Localidad a la lista del municipio"
         self.localidades.append(localidad)
+
+class RegistroClima:
+    "Guarda los datos del clima actual de una localidad"
+
+    def __init__(self, temperatura, humedad, viento, lluvia, estado_tiempo = "Desconocido"):
+        self.temperatura = temperatura
+        self.humedad = humedad
+        self.viento = viento
+        self.lluvia = lluvia
+        self.estado_tiempo = estado_tiempo
 
