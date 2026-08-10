@@ -1,5 +1,5 @@
 import requests
-from clases import RegistroClima
+from clases import RegistroClima, RegistroHistoricoMensual
 
 "Codigos de clima de open-meteo (WMO) traducidos a texto"
 CODIGOS_CLIMA = {
@@ -61,3 +61,63 @@ def obtener_clima_localidad(latitud, longitud):
         lluvia = actual.get("precipitation", 0.0),
         estado_tiempo =CODIGOS_CLIMA.get(codigo, "Desconocido"),
     )
+
+def obtener_historial_localidad(latitud, longitud, fecha_inicio, fecha_fin):
+    "Consulta el historial climatico mensual de una localidad en Open-Meteo"
+    if latitud is None or longitud is None:
+        return []
+
+    parametros = {
+        "latitude": latitud,
+        "longitude": longitud,
+        "start_date": fecha_inicio,
+        "end_date": fecha_fin,
+        "hourly": "temperature_2m,relative_humidity_2m,precipitation,wind_speed_10m",
+        "timezone": "auto",
+    }
+
+    try:
+        "(timeout = 15) ---> Espera maximo 15 segundos la respuesta antes de dar error de conexion "
+        resp = requests.get("https://archive-api.open-meteo.com/v1/archive", params=parametros, timeout=15)
+    except requests.exceptions.RequestException as i:
+        print("No se pudo conectar con el historico de Open-Meteo:", i)
+        return []
+
+    if resp.status_code != 200:
+        print("Open-Meteo respondio con error:", resp.status_code)
+        return []
+
+    horas = resp.json().get("hourly", {})
+    marcas = horas.get("time", [])
+    if not marcas:
+        return []
+
+    "Agrupamos hora por hora en un diccionario (anio, mes) para sacar los promedios"
+    grupos = {}
+    for pos in range(len(marcas)):
+        "cada marca de tiempo llega como '2024-01-15T13:00', el anio son los primeros 4 caracteres y el mes los del 6 al 7"
+        anio = int(marcas[pos][0:4])
+        mes = int(marcas[pos][5:7])
+        clave = (anio, mes)
+
+        if clave not in grupos:
+            grupos[clave] = {"temp": [], "hum": [], "lluvia": 0.0, "viento": []}
+
+        grupos[clave]["temp"].append(horas["temperature_2m"][pos])
+        grupos[clave]["hum"].append(horas["relative_humidity_2m"][pos])
+        grupos[clave]["lluvia"] += horas["precipitation"][pos]
+        grupos[clave]["viento"].append(horas["wind_speed_10m"][pos])
+
+    resultado = []
+    for (anio, mes) in sorted(grupos.keys()):
+        g = grupos[(anio, mes)]
+        resultado.append(RegistroHistoricoMensual(
+            anio = anio,
+            mes = mes,
+            temperatura = sum(g["temp"]) / len(g["temp"]),
+            humedad = sum(g["hum"]) / len(g["hum"]),
+            precipitacion = g["lluvia"],
+            viento = sum(g["viento"]) / len(g["viento"]),
+        ))
+
+    return resultado
