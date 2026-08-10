@@ -1,5 +1,6 @@
-from carga_datos import cargar_datos_json
+from carga_datos import cargar_datos_json, buscar_localidad
 from reportes import generar_grafico_coordenadas
+from API_clima import obtener_clima_localidad
 
 def main():
     municipios = cargar_datos_json()
@@ -19,10 +20,10 @@ def main():
 
         if opcion == "1":
             for municipio in municipios:
-                print (f" Municipio: ")
-                print (f" Total Localidades: ")
-                print (f" Con coordenadas: ")
-                print (f" Sin coordenadas:")
+                print (f" Total Localidades: {municipio.total_localidades()}")
+                print (f" Municipio: {municipio.nombre}")
+                print (f" Con coordenadas: {municipio.localidades_con_coordenadas()}")
+                print (f" Sin coordenadas: {municipio.localidades_con_coordenadas()}")
 
         elif opcion == "2":
             pass

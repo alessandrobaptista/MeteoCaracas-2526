@@ -1,14 +1,9 @@
 import matplotlib.pyplot as plt
 
 def generar_grafico_coordenadas (municipios):
-    nombres = []
-    con_coords = []
-    sin_coords = []
-
-    for municipio in municipios:
-        nombres.append()
-        con_coords.append()
-        sin_coords.append()
+    nombres = [municipio.nombre for municipio in municipios]
+    con_coords = [municipio.localidades_con_coordenadas() for municipio in municipios]
+    sin_coords = [municipio.localidades_sin_coordenadas() for municipio in municipios]
 
     plt.bar (nombres, con_coords, label ="Con coordenadas", color ="g")
     plt.bar (
