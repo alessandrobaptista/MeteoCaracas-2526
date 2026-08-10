@@ -51,7 +51,13 @@ def obtener_clima_localidad(latitud, longitud):
         print("Open-Meteo respondio con error:", resp.status_code)
         return None
 
-    actual = resp.json().get("current", {})
+    try:
+        "si la respuesta no viene en formato JSON esto lanza un ValueError"
+        actual = resp.json().get("current", {})
+    except ValueError:
+        print("Open-Meteo devolvio una respuesta que no se pudo leer")
+        return None
+
     codigo = actual.get("weather_code")
 
     return RegistroClima(
@@ -87,7 +93,13 @@ def obtener_historial_localidad(latitud, longitud, fecha_inicio, fecha_fin):
         print("Open-Meteo respondio con error:", resp.status_code)
         return []
 
-    horas = resp.json().get("hourly", {})
+    try:
+        "si la respuesta no viene en formato JSON esto lanza un ValueError"
+        horas = resp.json().get("hourly", {})
+    except ValueError:
+        print("Open-Meteo devolvio una respuesta que no se pudo leer")
+        return []
+
     marcas = horas.get("time", [])
     if not marcas:
         return []
