@@ -1,9 +1,7 @@
 class Localidad:
     "Representa una localidad dentro de un municipio"
 
-    def __init__(
-            self, nombre: str, latitud: float = None, longitud: float = None
-    ):
+    def __init__(self, nombre: str, latitud: float = None, longitud: float = None):
         "Inicializa los atributos básicos de la localidad"
         self.nombre = nombre
         self.latitud = latitud
@@ -73,4 +71,13 @@ class RegistroHistoricoMensual:
         "Representación en cadena de los datos históricos mensuales del clima"
         return f"{self.anio}-{self.mes:02d} -> Temp: {self.temperatura:.1f}°C | Humedad: {self.humedad:.1f}% | Precip: {self.recipitacion:.1f}mm | Viento: {self.viento:.1f}km/h"
 
-    
+class SesionConsultas:
+    "Guarda las consultas de la sesión para calcular estadísticas"
+
+    def __init__(self):
+        self.consultas = []
+
+    def agregar_consulta(self, nombre_mun, nombre_loc, clima):
+        "Añade una consulta válida a la sesión"
+        self.consultas.append((nombre_mun, nombre_loc, clima))
+
