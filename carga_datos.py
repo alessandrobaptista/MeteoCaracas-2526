@@ -49,5 +49,5 @@ def buscar_localidades_parcial(municipios: list, texto_buscar: str):
         for loc in m.localidades:
             if loc.nombre and texto in loc.nombre.lower():
                 coincidencias.append((loc, m.nombre))
-        return coincidencias
+    return coincidencias
 

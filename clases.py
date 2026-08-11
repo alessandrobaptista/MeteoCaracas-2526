@@ -69,7 +69,7 @@ class RegistroHistoricoMensual:
 
     def __str__(self):
         "Representación en cadena de los datos históricos mensuales del clima"
-        return f"{self.anio}-{self.mes:02d} -> Temp: {self.temperatura:.1f}°C | Humedad: {self.humedad:.1f}% | Precip: {self.recipitacion:.1f}mm | Viento: {self.viento:.1f}km/h"
+        return f"{self.anio}-{self.mes:02d} -> Temp: {self.temperatura:.1f}°C | Humedad: {self.humedad:.1f}% | Precip: {self.precipitacion:.1f}mm | Viento: {self.viento:.1f}km/h"
 
 class SesionConsultas:
     "Guarda las consultas de la sesión para calcular estadísticas"

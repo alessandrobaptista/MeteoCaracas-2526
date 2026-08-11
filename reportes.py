@@ -19,3 +19,14 @@ def generar_grafico_coordenadas (municipios):
     plt.ylabel ("Cantidad")
     plt.legend ()
     plt.show ()
+
+def generar_grafico_historico (anios, temperaturas):
+
+    plt.figure(figsize=(10,5))
+    plt.plot (anios, temperaturas, marker = "o", color="g")
+    plt.title ("Evolución de la temperatura durante los años")
+    plt.xlabel ("Años")
+    plt.ylabel ("Temperatura promedio")
+    plt.grid (True)
+    plt.xticks (rotation=45)
+    plt.show()
