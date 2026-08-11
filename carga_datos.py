@@ -1,7 +1,7 @@
 import json
 from clases import Localidad, Municipio
 
-def cargar_datos_json(ruta_archivo: str = "zonas_caracas.json"):
+def cargar_datos_json(ruta_archivo  = "zonas_caracas.json"):
     "Lee el archivo JSON y convierte la estructura a objetos Municipio y Localidad"
     try:
         with open(ruta_archivo, "r", encoding="utf-8") as archivo:
@@ -47,6 +47,7 @@ def buscar_localidades_parcial(municipios: list, texto_buscar: str):
 
     for m in municipios:
         for loc in m.localidades:
+
             if loc.nombre and texto in loc.nombre.lower():
                 coincidencias.append((loc, m.nombre))
     return coincidencias
